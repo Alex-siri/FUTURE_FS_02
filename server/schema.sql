@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS mini_crm;
+USE mini_crm;
+
+CREATE TABLE leads (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    source VARCHAR(100),
+    status VARCHAR(50) DEFAULT 'New',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

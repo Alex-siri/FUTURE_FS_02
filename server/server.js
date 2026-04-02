@@ -55,6 +55,41 @@ app.get('/api/leads', (req, res) => {
   });
 });
 
+// Update a lead
+app.put('/api/leads/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, email, source, status, notes } = req.body;
+  
+  const query = 'UPDATE leads SET name = ?, email = ?, source = ?, status = ?, notes = ? WHERE id = ?';
+  db.query(query, [name, email, source, status, notes, id], (err, result) => {
+    if (err) {
+      console.error('Error updating lead:', err.message);
+      return res.status(500).json({ error: 'Failed to update lead' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Lead not found' });
+    }
+    res.status(200).json({ message: 'Lead updated successfully!' });
+  });
+});
+
+// Delete a lead
+app.delete('/api/leads/:id', (req, res) => {
+  const { id } = req.params;
+  
+  const query = 'DELETE FROM leads WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error deleting lead:', err.message);
+      return res.status(500).json({ error: 'Failed to delete lead' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Lead not found' });
+    }
+    res.status(200).json({ message: 'Lead deleted successfully!' });
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
